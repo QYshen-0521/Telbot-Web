@@ -1,0 +1,13 @@
+# Prefer Debian trixie INDI packages over third-party mirrors (e.g. astroberry 2.2).
+# Install: sudo cp deploy/apt-telbot-indi.pref /etc/apt/preferences.d/telbot-indi-debian.pref
+#
+# See docs/INDI_APT_STACK.md
+
+Package: indi-bin libindi1 libindi-dev libindidriver1 libindiclient1 libindi-data libindilx200-1 libindialignmentdriver1
+Package: indi-sbig indi-asi indi-qhy indi-astroasis indi-celestron libsbig4t64
+Pin: release o=Debian
+Pin-Priority: 1001
+
+Package: indi-bin libindi1 libindi-dev indi-sbig indi-asi indi-qhy indi-astroasis indi-celestron
+Pin: origin astroberry.io
+Pin-Priority: -1

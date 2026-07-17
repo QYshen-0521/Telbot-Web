@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "auto_connect_by_driver": {
+    "indi_lx200gemini": { "device_from": "profile_hint" },
+    "indi_celestron_gps": { "device_from": "profile_hint" },
+    "indi_sbig_ccd": { "device": "SBIG CCD", "env": "TELBOT_INDI_CCD_DEVICE" },
+    "indi_asi_ccd": { "device": "ZWO CCD ASI294MC Pro", "env": "TELBOT_INDI_CCD_DEVICE" },
+    "indi_qhy_ccd": { "device": "QHY CCD QHY174M", "env": "TELBOT_INDI_CCD_DEVICE" },
+    "indi_oasis_focuser": { "device": "Oasis Focuser", "env": "TELBOT_INDI_FOCUSER_DEVICE" },
+    "indi_qhycfw3_wheel": { "device": "QHYCFW3", "env": "TELBOT_INDI_CFW_DEVICE" },
+    "indi_planewave_telescope": {
+      "device_from": "profile_hint",
+      "pre_connect_setprop": [
+        "PlaneWave.DEVICE_ADDRESS.ADDRESS=127.0.0.1",
+        "PlaneWave.DEVICE_ADDRESS.PORT=8220",
+        "PlaneWave.CONNECTION.DISCONNECT=Off"
+      ],
+      "post_connect_pwi4_mount": true
+    },
+    "indi_simulator_telescope": { "skip": true }
+  },
+  "on_no_usb_match": {
+    "action": "restart",
+    "indiserver_args_line": "-v indi_simulator_telescope",
+    "mount_profile_id": "no_usb_idle",
+    "device_name_hint": "Telescope Simulator",
+    "telbot_env_sync": false
+  },
+  "profiles": [
+    {
+      "id": "planewave_l350_usb",
+      "priority": 101,
+      "match": {
+        "usb_vid_pid": "1cbe:0267"
+      },
+      "requires_pwi4": true,
+      "indi_drivers": ["indi_planewave_telescope"],
+      "optional_indi_if": [
+        {
+          "match": { "usb_vid_pid": "03c3:294f" },
+          "indi_drivers": ["indi_asi_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "1618:c175" },
+          "indi_drivers": ["indi_qhy_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "0d97:0101" },
+          "indi_drivers": ["indi_sbig_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "338f:a0f0" },
+          "indi_drivers": ["indi_oasis_focuser"]
+        }
+      ],
+      "device_name_hint": "PlaneWave",
+      "packages_suggest": ["indi-bin"]
+    },
+    {
+      "id": "losmandy_gemini_usb",
+      "priority": 100,
+      "match": {
+        "usb_vid_pid": "1fc9:1705",
+        "by_id_substring": "Gemini"
+      },
+      "indi_drivers": ["indi_lx200gemini"],
+      "optional_indi_if": [
+        {
+          "match": { "usb_vid_pid": "0d97:0101" },
+          "indi_drivers": ["indi_sbig_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "338f:a0f0" },
+          "indi_drivers": ["indi_oasis_focuser"]
+        },
+        {
+          "match": { "usb_vid_pid": "03c3:294f" },
+          "indi_drivers": ["indi_asi_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "1618:c175" },
+          "indi_drivers": ["indi_qhy_ccd"]
+        }
+      ],
+      "device_name_hint": "Losmandy Gemini",
+      "packages_suggest": ["indi-bin"]
+    },
+    {
+      "id": "celestron_prolific_usb",
+      "priority": 98,
+      "match": {
+        "usb_vid_pid": "067b:2303"
+      },
+      "indi_drivers": ["indi_celestron_gps"],
+      "optional_indi_if": [
+        {
+          "match": { "usb_vid_pid": "0d97:0101" },
+          "indi_drivers": ["indi_sbig_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "338f:a0f0" },
+          "indi_drivers": ["indi_oasis_focuser"]
+        },
+        {
+          "match": { "usb_vid_pid": "03c3:294f" },
+          "indi_drivers": ["indi_asi_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "1618:c175" },
+          "indi_drivers": ["indi_qhy_ccd"]
+        }
+      ],
+      "device_name_hint": "Celestron GPS",
+      "packages_suggest": ["indi-bin"]
+    },
+    {
+      "id": "celestron_serial_by_id",
+      "priority": 95,
+      "match": {
+        "by_id_substring": "Celestron"
+      },
+      "indi_drivers": ["indi_celestron_gps"],
+      "optional_indi_if": [
+        {
+          "match": { "usb_vid_pid": "0d97:0101" },
+          "indi_drivers": ["indi_sbig_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "338f:a0f0" },
+          "indi_drivers": ["indi_oasis_focuser"]
+        },
+        {
+          "match": { "usb_vid_pid": "03c3:294f" },
+          "indi_drivers": ["indi_asi_ccd"]
+        },
+        {
+          "match": { "usb_vid_pid": "1618:c175" },
+          "indi_drivers": ["indi_qhy_ccd"]
+        }
+      ],
+      "device_name_hint": "Celestron GPS",
+      "packages_suggest": ["indi-bin"]
+    },
+    {
+      "id": "sbig_ccd_usb_only",
+      "priority": 75,
+      "match": {
+        "usb_vid_pid": "0d97:0101"
+      },
+      "indi_drivers": ["indi_sbig_ccd"],
+      "device_name_hint": "SBIG CCD",
+      "packages_suggest": ["indi-sbig", "libsbig4t64"],
+      "telbot_env_sync": false,
+      "telbot_env_keys": {
+        "TELBOT_INDI_CCD_DEVICE": "SBIG CCD"
+      }
+    },
+    {
+      "id": "zwo_asi294mc_usb_only",
+      "priority": 76,
+      "match": {
+        "usb_vid_pid": "03c3:294f"
+      },
+      "indi_drivers": ["indi_asi_ccd"],
+      "device_name_hint": "ZWO CCD ASI294MC Pro",
+      "packages_suggest": ["indi-asi"],
+      "telbot_env_sync": false,
+      "telbot_env_keys": {
+        "TELBOT_INDI_CCD_DEVICE": "ZWO CCD ASI294MC Pro"
+      }
+    },
+    {
+      "id": "qhy174m_usb_only",
+      "priority": 77,
+      "match": {
+        "usb_vid_pid": "1618:c175"
+      },
+      "indi_drivers": ["indi_qhy_ccd"],
+      "device_name_hint": "QHY CCD QHY174M",
+      "packages_suggest": ["indi-bin", "deploy/build-indi-3rdparty-qhy-oasis.sh"],
+      "telbot_env_sync": false,
+      "telbot_env_keys": {
+        "TELBOT_INDI_CCD_DEVICE": "QHY CCD QHY174M"
+      }
+    },
+    {
+      "id": "oasis_focuser_usb_only",
+      "priority": 77,
+      "match": {
+        "usb_vid_pid": "338f:a0f0"
+      },
+      "indi_drivers": ["indi_oasis_focuser"],
+      "device_name_hint": "Oasis Focuser",
+      "packages_suggest": ["indi-bin", "deploy/install-indi-oasis-focuser.sh"],
+      "telbot_env_sync": false
+    },
+    {
+      "id": "qhy_cfw3_wheel_usb",
+      "priority": 88,
+      "match_mode": "any",
+      "match": {
+        "usb_vid_pid": "10c4:ea60",
+        "by_id_substring": "Silicon_Labs_CP2102"
+      },
+      "indiserver_args_line": "-p 7624 -v indi_qhycfw3_wheel",
+      "indi_drivers": ["indi_qhycfw3_wheel"],
+      "device_name_hint": "QHY CFW3",
+      "packages_suggest": ["indi-bin"],
+      "telbot_env_sync": false
+    }
+  ]
+}

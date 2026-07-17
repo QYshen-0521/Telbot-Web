@@ -1,0 +1,31 @@
+# Legacy fixed-driver unit. For USB-selected mount + optional same manifest as Telbot, prefer
+# deploy/indi-telescope.service + telbot-select-mount.sh (see docs/MOUNT_AUTO.md).
+#
+# Copy to /etc/systemd/system/indi-gemini.service on Raspberry Pi, then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now indi-gemini.service
+#
+# Default ExecStart loads mount + SBIG CCD on one indiserver (port 7624). Do not start a
+# second indiserver on the same port (bind: Address already in use).
+# Adjust to match your hardware:
+#   - Mount only: indiserver -v indi_lx200gemini
+#   - Mount + SBIG (below): requires indi_sbig_ccd on the Pi (indi-full or indi-sbig package)
+#   - Simulators: append indi_simulator_ccd indi_simulator_guide
+#
+# Replace User= with your SSH user (e.g. qyshen).
+
+[Unit]
+Description=INDI server (Losmandy Gemini + SBIG CCD)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=qyshen
+Group=dialout
+ExecStart=/usr/bin/indiserver -v indi_lx200gemini indi_sbig_ccd
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

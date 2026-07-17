@@ -1,0 +1,112 @@
+{"text": "我要看木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "请指向木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "帮我转到木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "观测木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "去看看木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "对准木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "我想看火星", "voice": {"version": 1, "action": "goto", "target": "mars", "frame": "JNOW"}}
+{"text": "指向火星", "voice": {"version": 1, "action": "goto", "target": "mars", "frame": "JNOW"}}
+{"text": "转到火星", "voice": {"version": 1, "action": "goto", "target": "mars", "frame": "JNOW"}}
+{"text": "看看月亮", "voice": {"version": 1, "action": "goto", "target": "moon", "frame": "JNOW"}}
+{"text": "对准月球", "voice": {"version": 1, "action": "goto", "target": "moon", "frame": "JNOW"}}
+{"text": "我要看月亮", "voice": {"version": 1, "action": "goto", "target": "moon", "frame": "JNOW"}}
+{"text": "看土星", "voice": {"version": 1, "action": "goto", "target": "saturn", "frame": "JNOW"}}
+{"text": "指向土星", "voice": {"version": 1, "action": "goto", "target": "saturn", "frame": "JNOW"}}
+{"text": "看看金星", "voice": {"version": 1, "action": "goto", "target": "venus", "frame": "JNOW"}}
+{"text": "立刻停止", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "马上停止", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "别动了", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "中止跟踪", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "停止转动", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "急停", "voice": {"version": 1, "action": "abort", "frame": "JNOW"}}
+{"text": "归位", "voice": {"version": 1, "action": "park", "frame": "JNOW"}}
+{"text": "停车", "voice": {"version": 1, "action": "park", "frame": "JNOW"}}
+{"text": "回到初始位置", "voice": {"version": 1, "action": "park", "frame": "JNOW"}}
+{"text": "回到停车位置", "voice": {"version": 1, "action": "park", "frame": "JNOW"}}
+{"text": "请归位", "voice": {"version": 1, "action": "park", "frame": "JNOW"}}
+{"text": "往左一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "left", "frame": "JNOW"}}
+{"text": "往左转一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "left", "frame": "JNOW"}}
+{"text": "向左转一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "left", "frame": "JNOW"}}
+{"text": "再往左一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "left", "frame": "JNOW"}}
+{"text": "往右一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "right", "frame": "JNOW"}}
+{"text": "往右转一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "right", "frame": "JNOW"}}
+{"text": "再往右一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "right", "frame": "JNOW"}}
+{"text": "往上一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "up", "frame": "JNOW"}}
+{"text": "往上转一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "up", "frame": "JNOW"}}
+{"text": "往下一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "down", "frame": "JNOW"}}
+{"text": "往下转一点", "voice": {"version": 1, "action": "nudge", "nudge_direction": "down", "frame": "JNOW"}}
+{"text": "我想看北极星", "voice": {"version": 1, "action": "goto", "target": "北极星", "frame": "JNOW"}}
+{"text": "帮我找北极星", "voice": {"version": 1, "action": "goto", "target": "北极星", "frame": "JNOW"}}
+{"text": "帮我找 HD 224", "voice": {"version": 1, "action": "goto", "target": "HD 224", "frame": "JNOW"}}
+{"text": "对准 NGC 7000", "voice": {"version": 1, "action": "goto", "target": "NGC 7000", "frame": "JNOW"}}
+{"text": "找 M31", "voice": {"version": 1, "action": "goto", "target": "M31", "frame": "JNOW"}}
+{"text": "connect", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连接", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连 接", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "请帮我连接", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连接望远镜", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连接赤道仪", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连上望远镜", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连上赤道仪", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "建立连接", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "连接设备", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "indi connect", "voice": {"version": 1, "action": "connect", "frame": "JNOW"}}
+{"text": "unpark", "voice": {"version": 1, "action": "unpark", "frame": "JNOW"}}
+{"text": "on park", "voice": {"version": 1, "action": "unpark", "frame": "JNOW"}}
+{"text": "on park。", "voice": {"version": 1, "action": "unpark", "frame": "JNOW"}}
+{"text": "解除停车", "voice": {"version": 1, "action": "unpark", "frame": "JNOW"}}
+{"text": "解锁停车", "voice": {"version": 1, "action": "unpark", "frame": "JNOW"}}
+{"text": "拍照", "voice": {"version": 1, "action": "snap", "frame": "JNOW"}}
+{"text": "拍一张照片", "voice": {"version": 1, "action": "snap", "frame": "JNOW"}}
+{"text": "快门", "voice": {"version": 1, "action": "snap", "frame": "JNOW"}}
+{"text": "拍5秒", "voice": {"version": 1, "action": "snap", "exposure_seconds": 5, "frame": "JNOW"}}
+{"text": "曝光3秒", "voice": {"version": 1, "action": "snap", "exposure_seconds": 3, "frame": "JNOW"}}
+{"text": "介绍一下木星", "voice": {"version": 1, "action": "describe", "target": "jupiter", "frame": "JNOW"}}
+{"text": "帮我介绍一下北极星", "voice": {"version": 1, "action": "describe", "target": "北极星", "frame": "JNOW"}}
+{"text": "M31是什么天体", "voice": {"version": 1, "action": "describe", "target": "M31", "frame": "JNOW"}}
+{"text": "校准", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "帮我校准一下", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "做一下板校", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "天文校准", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "图像校准", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "plate solve", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "platesolve", "voice": {"version": 1, "action": "platesolve", "frame": "JNOW"}}
+{"text": "校准拍5秒", "voice": {"version": 1, "action": "platesolve", "exposure_seconds": 5, "frame": "JNOW"}}
+{"text": "校准并同步望远镜", "voice": {"version": 1, "action": "platesolve", "platesolve_align": "sync", "frame": "JNOW"}}
+{"text": "帮我校准并同步望远镜", "voice": {"version": 1, "action": "platesolve", "platesolve_align": "sync", "frame": "JNOW"}}
+{"text": "查询当前电调位置", "voice": {"version": 1, "action": "focuser_position", "frame": "JNOW"}}
+{"text": "电调位置多少", "voice": {"version": 1, "action": "focuser_position", "frame": "JNOW"}}
+{"text": "查看调焦位置", "voice": {"version": 1, "action": "focuser_position", "frame": "JNOW"}}
+{"text": "把电调向前移动50", "voice": {"version": 1, "action": "focuser_rel", "focuser_direction": "out", "focuser_steps": 50, "frame": "JNOW"}}
+{"text": "电调向后移动100步", "voice": {"version": 1, "action": "focuser_rel", "focuser_direction": "in", "focuser_steps": 100, "frame": "JNOW"}}
+{"text": "调焦器往前移30", "voice": {"version": 1, "action": "focuser_rel", "focuser_direction": "out", "focuser_steps": 30, "frame": "JNOW"}}
+{"text": "帮我自动对焦", "voice": {"version": 1, "action": "focuser_autofocus", "frame": "JNOW"}}
+{"text": "自动调焦", "voice": {"version": 1, "action": "focuser_autofocus", "frame": "JNOW"}}
+{"text": "检查一下设备是否就绪", "voice": {"version": 1, "action": "preflight", "frame": "JNOW"}}
+{"text": "设备就绪诊断", "voice": {"version": 1, "action": "preflight", "frame": "JNOW"}}
+{"text": "查询当前滤镜", "voice": {"version": 1, "action": "cfw_current", "frame": "JNOW"}}
+{"text": "现在用的是哪个滤镜", "voice": {"version": 1, "action": "cfw_current", "frame": "JNOW"}}
+{"text": "有哪些滤镜可以用", "voice": {"version": 1, "action": "cfw_list", "frame": "JNOW"}}
+{"text": "列出所有滤镜", "voice": {"version": 1, "action": "cfw_list", "frame": "JNOW"}}
+{"text": "切换到红色滤镜", "voice": {"version": 1, "action": "cfw_goto", "target": "红", "frame": "JNOW"}}
+{"text": "换成Ha滤镜", "voice": {"version": 1, "action": "cfw_goto", "target": "ha", "frame": "JNOW"}}
+{"text": "切到4号滤镜", "voice": {"version": 1, "action": "cfw_goto", "target": "4", "frame": "JNOW"}}
+{"text": "当前有哪些设备连接到pi", "voice": {"version": 1, "action": "usb_devices", "frame": "JNOW"}}
+{"text": "树莓派上连了哪些设备", "voice": {"version": 1, "action": "usb_devices", "frame": "JNOW"}}
+{"text": "查询usb连接的设备", "voice": {"version": 1, "action": "usb_devices", "frame": "JNOW"}}
+{"text": "请介绍一下你的功能", "voice": {"version": 1, "action": "help", "frame": "JNOW"}}
+{"text": "你能做什么", "voice": {"version": 1, "action": "help", "frame": "JNOW"}}
+{"text": "使用帮助", "voice": {"version": 1, "action": "help", "frame": "JNOW"}}
+{"text": "今晚可观测的系外行星事件有哪些", "voice": {"version": 1, "action": "exoplanet_transits", "frame": "JNOW"}}
+{"text": "今晚有哪些系外行星凌星", "voice": {"version": 1, "action": "exoplanet_transits", "frame": "JNOW"}}
+{"text": "查询今晚凌星事件", "voice": {"version": 1, "action": "exoplanet_transits", "frame": "JNOW"}}
+{"text": "规划第2个凌星", "voice": {"version": 1, "action": "plan_exoplanet_transit", "event_index": 2, "frame": "JNOW"}}
+{"text": "今晚观测 WASP-12 b 凌星", "voice": {"version": 1, "action": "plan_exoplanet_transit", "target": "WASP-12 b", "frame": "JNOW"}}
+{"text": "帮我规划凌星观测", "voice": {"version": 1, "action": "plan_exoplanet_transit", "event_index": 1, "frame": "JNOW"}}
+{"text": "帮我规划第1个凌星", "voice": {"version": 1, "action": "plan_exoplanet_transit", "event_index": 1, "frame": "JNOW"}}
+{"text": "帮我规划第一个凌星", "voice": {"version": 1, "action": "plan_exoplanet_transit", "event_index": 1, "frame": "JNOW"}}
+{"text": "今晚有哪些系外行星观测事件", "voice": {"version": 1, "action": "exoplanet_transits", "frame": "JNOW"}}
+{"text": "帮我指向木星", "voice": {"version": 1, "action": "goto", "target": "jupiter", "frame": "JNOW"}}
+{"text": "帮我指向M31", "voice": {"version": 1, "action": "goto", "target": "M31", "frame": "JNOW"}}
+{"text": "请帮我指向土星", "voice": {"version": 1, "action": "goto", "target": "saturn", "frame": "JNOW"}}
+{"text": "帮我把望远镜对准月球", "voice": {"version": 1, "action": "goto", "target": "moon", "frame": "JNOW"}}

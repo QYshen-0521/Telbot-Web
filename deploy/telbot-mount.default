@@ -1,0 +1,24 @@
+# Telbot：udev 触发「换镜选 profile」时使用的环境（root 运行，无你的登录环境）。
+# 安装：sudo cp deploy/telbot-mount.default /etc/default/telbot-mount
+#      编辑下行路径为你的 Telbot 仓库 .env（与日常 telbot CLI 一致）
+#
+# 若不设置，自动选镜仍会更改 /run/telbot/* 与重启 indiserver，但可能不会更新你主目录下的 .env。
+#
+# 重要：不要用 root 直接编辑 ~/Telbot/.env（sudo vi /home/…/.env）。
+# udev / sudo telbot-select-mount.sh 以 root 写 .env 后，env_sync 会把 owner 改回 TELBOT_ENV_OWNER。
+
+TELBOT_ENV_FILE=/home/qyshen/Telbot/.env
+TELBOT_ENV_OWNER=qyshen
+# udev 插拔后等待秒数再 lsusb 选镜（QHY174 引导 c174→工作 c175 时建议 5–8）
+TELBOT_UDEV_SETTLE_SECONDS=5
+# udev ACTION=remove 时再等多几秒，避免拔线后 lsusb 仍短暂看到相机
+TELBOT_UDEV_REMOVE_SETTLE_SECONDS=5
+# 选镜 / 自动 CONNECT 使用的 Python（建议 venv，含 telbot 时可选）
+# TELBOT_PYTHON=/home/pi/Telbot/.venv/bin/python3
+# PlaneWave PWI4（deploy/pwi4.service + telbot-pwi4-wrap.sh；选镜时 start，勿手动 enable）
+# TELBOT_PWI4_HOME=/home/qyshen/pwi-4.1.8final
+# TELBOT_PWI4_CONFIG_ROOT=/home/qyshen/.planewave/PWI4
+# TELBOT_PWI4_READY_TIMEOUT_S=60
+# TELBOT_PWI4_MOUNT_CONNECT_TIMEOUT_S=45
+# sudo 选镜写 .env 时用 venv Python（否则 env_sync 可能找不到）：
+# TELBOT_PYTHON=/home/qyshen/Telbot/.venv/bin/python3

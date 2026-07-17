@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Telbot 天文控制台</title>
+    <link rel="stylesheet" href="/web/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Telbot navigation">
+        <section class="brand-block">
+          <div class="brand-mark">T</div>
+          <div>
+            <h1>Telbot</h1>
+            <p>天文控制台</p>
+          </div>
+        </section>
+
+        <section class="panel compact">
+          <div class="panel-heading">
+            <h2>系统状态</h2>
+            <button id="refreshHealth" class="icon-button" type="button" title="刷新状态">↻</button>
+          </div>
+          <div id="healthSummary" class="health-summary">
+            <div class="status-line"><span>API</span><strong class="muted">检查中</strong></div>
+          </div>
+        </section>
+
+        <section class="panel compact">
+          <h2>安全模式</h2>
+          <label class="execute-toggle">
+            <input id="executeToggle" type="checkbox" />
+            <span>
+              <strong>真机执行</strong>
+              <small>关闭时仅干跑，不会转镜或曝光</small>
+            </span>
+          </label>
+          <button id="abortButton" class="danger-button" type="button">急停 / Abort</button>
+        </section>
+
+        <nav class="nav-tabs" aria-label="功能">
+          <button class="nav-tab active" type="button" data-tab="chat">对话控制</button>
+          <button class="nav-tab" type="button" data-tab="capture">拍摄</button>
+          <button class="nav-tab" type="button" data-tab="devices">设备</button>
+          <button class="nav-tab" type="button" data-tab="plan">计划</button>
+          <button class="nav-tab" type="button" data-tab="settings">设置</button>
+        </nav>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Telbot astronomy control</p>
+            <h2 id="pageTitle">对话控制</h2>
+          </div>
+          <div class="topbar-actions">
+            <span id="modeBadge" class="mode-badge">干跑模式</span>
+            <button id="openHealthJson" class="secondary-button" type="button">查看状态 JSON</button>
+          </div>
+        </header>
+
+        <section class="tab-page active" id="tab-chat">
+          <div class="chat-layout">
+            <div id="messages" class="messages" aria-live="polite"></div>
+            <aside class="assistant-side">
+              <section class="panel">
+                <h2>快捷命令</h2>
+                <div class="quick-grid">
+                  <button class="quick-command" type="button" data-command="帮我指向木星">指向木星</button>
+                  <button class="quick-command" type="button" data-command="归位">归位</button>
+                  <button class="quick-command" type="button" data-command="检查设备">检查设备</button>
+                  <button class="quick-command" type="button" data-command="拍5秒">拍5秒</button>
+                  <button class="quick-command" type="button" data-command="校准">Plate solve</button>
+                  <button class="quick-command" type="button" data-command="今晚有哪些系外行星凌星">今晚凌星</button>
+                </div>
+              </section>
+              <section class="panel">
+                <h2>本次结果</h2>
+                <div id="lastIntent" class="empty-state">还没有命令结果。</div>
+              </section>
+            </aside>
+          </div>
+          <form id="composer" class="composer">
+            <button id="recordButton" class="tool-button" type="button" title="语音输入">●</button>
+            <textarea id="promptInput" rows="1" placeholder="输入：帮我指向木星、拍5秒、归位、检查设备"></textarea>
+            <button class="send-button" type="submit">发送</button>
+          </form>
+        </section>
+
+        <section class="tab-page" id="tab-capture">
+          <div class="grid two">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>拍单张</h2>
+                <span class="hint">POST /camera/snap</span>
+              </div>
+              <label class="field">
+                <span>曝光秒数</span>
+                <input id="singleExposure" type="number" min="0.1" max="3600" step="0.1" value="5" />
+              </label>
+              <div class="button-row">
+                <button id="snapButton" class="primary-button" type="button">拍摄单张</button>
+                <button id="loadSnapPreview" class="secondary-button" type="button">加载预览</button>
+              </div>
+              <div id="snapResult" class="result-box">尚未拍摄。</div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>照片预览</h2>
+                <span class="hint">GET /camera/snap/preview</span>
+              </div>
+              <div id="snapPreviewBox" class="preview-box">暂无预览。</div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>边拍边叠</h2>
+                <span class="hint">Live Stack</span>
+              </div>
+              <div class="field-row">
+                <label class="field">
+                  <span>总时长秒</span>
+                  <input id="liveDuration" type="number" min="1" step="1" value="300" />
+                </label>
+                <label class="field">
+                  <span>单帧曝光秒</span>
+                  <input id="liveExposure" type="number" min="0.1" step="0.1" value="2" />
+                </label>
+              </div>
+              <div class="button-row">
+                <button id="liveStart" class="primary-button" type="button">开始叠加</button>
+                <button id="liveStop" class="secondary-button" type="button">停止</button>
+                <button id="liveStatus" class="secondary-button" type="button">刷新状态</button>
+              </div>
+              <div id="liveResult" class="result-box">尚未启动。</div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>校准拍摄</h2>
+                <span class="hint">Bias / Dark / Flat / Light</span>
+              </div>
+              <div class="field-row">
+                <label class="field">
+                  <span>类型</span>
+                  <select id="calKind">
+                    <option value="bias">Bias 偏置</option>
+                    <option value="dark">Dark 暗场</option>
+                    <option value="flat">Flat 平场</option>
+                    <option value="light">Light 亮场</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>张数</span>
+                  <input id="calCount" type="number" min="1" step="1" value="5" />
+                </label>
+                <label class="field">
+                  <span>曝光秒数</span>
+                  <input id="calExposure" type="number" min="0" step="0.1" value="1" />
+                </label>
+              </div>
+              <div class="button-row">
+                <button id="calStart" class="primary-button" type="button">开始校准</button>
+                <button id="calStop" class="secondary-button" type="button">停止校准</button>
+              </div>
+              <div id="calResult" class="result-box">尚未拍摄校准帧。</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-devices">
+          <div class="grid two">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>设备健康</h2>
+                <button id="deviceRefresh" class="secondary-button" type="button">刷新</button>
+              </div>
+              <div id="deviceCards" class="device-cards"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>USB 设备</h2>
+                <button id="usbRefresh" class="secondary-button" type="button">读取 USB</button>
+              </div>
+              <div id="usbResult" class="result-box">尚未读取。</div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>电调</h2>
+                <button id="focuserRefresh" class="secondary-button" type="button">读取位置</button>
+              </div>
+              <label class="field">
+                <span>移动到绝对位置</span>
+                <input id="focuserPosition" type="number" min="0" step="1" placeholder="例如 33400" />
+              </label>
+              <button id="focuserMove" class="primary-button" type="button">移动电调</button>
+              <div id="focuserResult" class="result-box">尚未读取。</div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>滤镜轮</h2>
+                <button id="filterRefresh" class="secondary-button" type="button">读取滤镜</button>
+              </div>
+              <div id="filterResult" class="result-box">尚未读取。</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-plan">
+          <div class="grid two">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>凌星计划状态</h2>
+                <button id="transitStatus" class="secondary-button" type="button">刷新状态</button>
+              </div>
+              <div id="transitResult" class="result-box">尚未查询。</div>
+            </section>
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>计划控制</h2>
+                <span class="hint">谨慎使用</span>
+              </div>
+              <label class="field">
+                <span>计划 JSON 路径，可留空使用最新计划</span>
+                <input id="transitPlanPath" type="text" placeholder="留空 = 最新 transit_*.json" />
+              </label>
+              <div class="button-row">
+                <button id="transitRun" class="primary-button" type="button">启动凌星计划</button>
+                <button id="transitAbort" class="danger-inline" type="button">中止凌星</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="tab-page" id="tab-settings">
+          <div class="grid two">
+            <section class="panel">
+              <div class="panel-heading">
+                <h2>服务器参数</h2>
+                <button id="envLoad" class="secondary-button" type="button">读取参数</button>
+              </div>
+              <div id="envFields" class="env-fields"></div>
+              <button id="envSave" class="primary-button" type="button">保存修改</button>
+            </section>
+            <section class="panel">
+              <h2>说明</h2>
+              <div class="copy-block">
+                <p>网站默认调用当前 Telbot 服务地址。部署在树莓派上时，浏览器访问 <code>http://telbot.local:8765</code> 即可。</p>
+                <p>保存参数会调用 <code>PATCH /config/env</code>，只允许后端白名单中的 <code>TELBOT_*</code> 配置。</p>
+                <p>真机执行默认关闭。打开后，GOTO、拍照、计划运行等操作都会二次确认。</p>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="confirmDialog" class="confirm-dialog">
+      <h2>确认真机执行</h2>
+      <p id="confirmText">这次操作会真实控制设备。</p>
+      <div class="dialog-actions">
+        <button id="cancelConfirm" class="secondary-button" type="button">取消</button>
+        <button id="acceptConfirm" class="danger-button" type="button">确认执行</button>
+      </div>
+    </dialog>
+
+    <dialog id="jsonDialog" class="json-dialog">
+      <div class="dialog-title">
+        <h2>JSON 数据</h2>
+        <button id="closeJsonDialog" class="icon-button" type="button">×</button>
+      </div>
+      <pre id="jsonDialogBody"></pre>
+    </dialog>
+
+    <script src="/web/app.js" defer></script>
+  </body>
+</html>

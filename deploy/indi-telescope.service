@@ -1,0 +1,35 @@
+# Multi-brand INDI: drivers come from /run/telbot/indiserver.args (telbot-select-mount.sh).
+# Install on Raspberry Pi:
+#   sudo cp deploy/telbot-indiserver-wrap.sh deploy/telbot-select-mount.sh deploy/telbot_select_mount.py \
+#          deploy/mount_profiles.json /usr/local/lib/telbot-deploy/
+#   sudo chmod +x /usr/local/lib/telbot-deploy/*.sh
+#   sudo ln -sf /usr/local/lib/telbot-deploy/telbot-select-mount.sh /usr/local/bin/telbot-select-mount.sh
+#   sudo ln -sf /usr/local/lib/telbot-deploy/telbot-indiserver-wrap.sh /usr/local/bin/telbot-indiserver-wrap.sh
+#   sudo cp deploy/indi-telescope.service /etc/systemd/system/
+#   Edit User=/Group= below; then:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now indi-telescope.service
+#
+# If migrating from indi-gemini.service: disable it first (only one indiserver on 7624).
+
+[Unit]
+Description=INDI server (Telbot mount_profiles + optional CCD)
+After=network-online.target local-fs.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+RuntimeDirectory=telbot
+User=qyshen
+Group=dialout
+StandardInput=null
+StandardOutput=journal
+StandardError=journal
+# Refresh /run/telbot/indiserver.args from USB before each start (no restart; non-blocking flock)
+ExecStartPre=-/usr/bin/env TELBOT_SELECT_MOUNT_NO_RESTART=1 TELBOT_SELECT_MOUNT_TRY_LOCK=1 /usr/local/bin/telbot-select-mount.sh
+ExecStart=/usr/local/bin/telbot-indiserver-wrap.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

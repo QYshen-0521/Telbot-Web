@@ -1,0 +1,44 @@
+# Markdown：默认忽略，避免个人/现场文档的修改进入提交；核心说明仍用 ! 保留跟踪
+*.md
+!README.md
+!docs/MOUNT_AUTO_PLAN.md
+!docs/MOUNT_AUTO.md
+!docs/USB_DEVICE_REGISTRY.md
+!docs/TELBOT_CONTEXT_AND_PENDING.md
+!docs/HTTP_API_ERRORS.md
+!help.md
+!worklog.md
+
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+*.bsp
+
+# CCD captures & plate solve artifacts (under repo data/)
+data/ccd_captures/
+data/platesolve/in/
+data/platesolve/out/
+data/platesolve/logs/
+data/platesolve/index/
+data/platesolve/last_solve.json
+data/plans/*.json
+data/run/
+
+# INDI offline .deb / tarball (see deploy/indi-offline/README.md)
+deploy/indi-offline/**/*.deb
+deploy/indi-offline/**/*.tar.gz
+deploy/indi-offline/**/MANIFEST.txt
+deploy/indi-offline/**/installed-paths.txt
+deploy/indi-offline/**/apt-telbot-indi.pref
+deploy/indi-offline/arm64/*
+!deploy/indi-offline/arm64/.gitkeep
+!deploy/indi-offline/README.md
+!docs/INDI_DRIVER_CALL_CHAIN.md

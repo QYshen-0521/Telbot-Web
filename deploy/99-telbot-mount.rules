@@ -1,0 +1,46 @@
+# udev: 插拔 USB / 串口时异步执行选镜（systemd-run 避免阻塞 udev）。
+#
+# 安装：
+#   sudo cp deploy/99-telbot-mount.rules /etc/udev/rules.d/99-telbot-mount.rules
+#   sudo cp deploy/telbot-udev-select-mount.sh /usr/local/lib/telbot-deploy/
+#   sudo chmod +x /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh
+#   sudo cp deploy/telbot-mount.default /etc/default/telbot-mount
+#   sudo sed -i 's|/home/pi/Telbot/.env|/home/你的用户/Telbot/.env|' /etc/default/telbot-mount
+#   sudo udevadm control --reload-rules && sudo udevadm trigger
+#
+# 验证：sudo udevadm monitor --udev -s usb
+# 见 docs/MOUNT_AUTO.md
+
+ACTION=="add", SUBSYSTEM=="tty", KERNEL=="ttyACM[0-9]*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="add", SUBSYSTEM=="tty", KERNEL=="ttyUSB[0-9]*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="tty", KERNEL=="ttyACM[0-9]*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="tty", KERNEL=="ttyUSB[0-9]*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+
+# 无 tty 的 USB 设备：须在 usb_device 节点上匹配（interface 子节点无 idVendor/idProduct）
+# SBIG CCD
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="0d97", ATTR{idProduct}=="0101", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="d97/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+
+# Astroasis Oasis 电调（HID）
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="338f", ATTR{idProduct}=="a0f0", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="338f/a0f0/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="338f/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+
+# ZWO ASI294MC Pro（USB3）
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="03c3", ATTR{idProduct}=="294f", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="3c3/294f/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="3c3/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+
+# QHY174M：引导 1618:c174（WestBridge/fxload）→ 工作 1618:c175（lsusb 选镜匹配 c175）
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1618", ATTR{idProduct}=="c174", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1618", ATTR{idProduct}=="c175", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1618", ATTR{idProduct}=="c174", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1618", ATTR{idProduct}=="c175", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="1618/c174/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="1618/c175/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="1618/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+
+# PlaneWave L mount (PWI4 USB; INDI via HTTP :8220)
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="1cbe", ATTR{idProduct}=="0267", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="1cbe/267/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{PRODUCT}=="1cbe/*", RUN+="/usr/bin/systemd-run --collect --no-block /usr/local/lib/telbot-deploy/telbot-udev-select-mount.sh"

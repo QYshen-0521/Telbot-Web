@@ -1,0 +1,26 @@
+# PlaneWave PWI4 (HTTP :8220) for indi_planewave_telescope.
+# Install:
+#   sudo cp deploy/pwi4.service /etc/systemd/system/
+#   sudo cp deploy/telbot-pwi4-wrap.sh /usr/local/bin/
+#   sudo chmod +x /usr/local/bin/telbot-pwi4-wrap.sh
+#   Edit User/Group below (dialout); set TELBOT_PWI4_HOME in /etc/default/telbot-mount if needed
+#   sudo systemctl daemon-reload
+# Do NOT enable by default — telbot-select-mount.sh starts this when PlaneWave USB is present.
+
+[Unit]
+Description=PlaneWave PWI4 (HTTP API for L mount)
+After=network-online.target local-fs.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=qyshen
+Group=dialout
+WorkingDirectory=/home/qyshen/pwi-4.1.8final
+EnvironmentFile=-/etc/default/telbot-mount
+ExecStart=/usr/local/bin/telbot-pwi4-wrap.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "comment": "ETC 自动解析用；与 deploy/mount_profiles.json 的 id、USB 登记表一致。缺项由 .env 或 defaults 补齐。",
+  "mount_profiles": {
+    "planewave_l350_usb": {
+      "aperture_mm": 356,
+      "focal_length_mm": 2310,
+      "notes": "PlaneWave 14\" f/6.5 RC 量级（镜筒+主镜，非仅 mount）"
+    },
+    "losmandy_gemini_usb": {
+      "notes": "仅赤道仪；口径/焦距请设 TELBOT_OTA_APERTURE_MM / TELBOT_OTA_FOCAL_LENGTH_MM"
+    },
+    "celestron_prolific_usb": {
+      "aperture_mm": 203,
+      "focal_length_mm": 1000,
+      "notes": "示例：8\" SCT 量级，请按现场 OTA 改 .env"
+    }
+  },
+  "ccd_devices": {
+    "ZWO CCD ASI294MC Pro": {
+      "pixel_size_um": 3.76,
+      "read_noise_e": 1.2,
+      "full_well_e": 57000
+    },
+    "QHY CCD QHY174M": {
+      "pixel_size_um": 5.86,
+      "read_noise_e": 5.0,
+      "full_well_e": 30000
+    },
+    "SBIG CCD": {
+      "pixel_size_um": 9.0,
+      "read_noise_e": 8.0,
+      "full_well_e": 100000
+    }
+  },
+  "ccd_vid_pid": {
+    "03c3:294f": {
+      "pixel_size_um": 3.76,
+      "read_noise_e": 1.2,
+      "full_well_e": 57000,
+      "device_name": "ZWO CCD ASI294MC Pro"
+    },
+    "1618:c175": {
+      "pixel_size_um": 5.86,
+      "read_noise_e": 5.0,
+      "full_well_e": 30000,
+      "device_name": "QHY CCD QHY174M"
+    },
+    "0d97:0101": {
+      "pixel_size_um": 9.0,
+      "read_noise_e": 8.0,
+      "full_well_e": 100000,
+      "device_name": "SBIG CCD"
+    }
+  },
+  "defaults": {
+    "aperture_mm": 200.0,
+    "focal_length_mm": 1000.0,
+    "pixel_size_um": 5.5,
+    "read_noise_e": 3.0,
+    "full_well_e": 60000.0
+  }
+}
