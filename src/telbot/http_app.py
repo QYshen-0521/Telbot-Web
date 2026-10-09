@@ -11,6 +11,7 @@ from fastapi import Body, FastAPI, File, HTTPException, Query, Request, UploadFi
 
 from telbot import __version__ as telbot_version
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, Field
 
@@ -61,9 +62,62 @@ from telbot.voice_listen import listen_pipeline_from_wav
 
 app = FastAPI(title="Telbot local GOTO API", version="0.6.0")
 
+# Browser clients on GitHub Pages call this API cross-origin. CORS is not authentication:
+# do not expose the Pi to untrusted networks. Dry-run remains the default for control routes.
+# allow_private_network lets a public https page preflight a LAN or localhost API.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_private_network=True,
+)
+
+
+class _PrivateNetworkAccess:
+    """Also mark ordinary responses, not only the CORS preflight, as private-network OK."""
+
+    def __init__(self, app: Any) -> None:
+        self.app = app
+
+    async def __call__(self, scope: dict, receive: Any, send: Any) -> None:
+        if scope.get("type") != "http":
+            await self.app(scope, receive, send)
+            return
+
+        async def send_with_pna(message: dict) -> None:
+            if message["type"] == "http.response.start":
+                headers = list(message.get("headers") or [])
+                if not any(key.lower() == b"access-control-allow-private-network" for key, _ in headers):
+                    headers.append((b"access-control-allow-private-network", b"true"))
+                    message = {**message, "headers": headers}
+            await send(message)
+
+        await self.app(scope, receive, send_with_pna)
+
+
+# Added last so it wraps CORS and the header survives on non-preflight responses.
+app.add_middleware(_PrivateNetworkAccess)
+
+_WEB_MEDIA = {
+    "styles.css": "text/css; charset=utf-8",
+    "app.js": "application/javascript; charset=utf-8",
+}
+
 
 def _web_file(name: str) -> Path:
     return Path(__file__).resolve().parents[2] / "web" / name
+
+
+def _web_response(name: str) -> FileResponse:
+    media = _WEB_MEDIA.get(name)
+    if media is None:
+        raise HTTPException(404, "asset not found")
+    path = _web_file(name)
+    if not path.is_file():
+        raise HTTPException(404, f"web/{name} not found")
+    return FileResponse(path, media_type=media, headers={"Cache-Control": "no-store"})
 
 
 @app.get("/", include_in_schema=False)
@@ -74,15 +128,19 @@ def web_index() -> FileResponse:
     return FileResponse(path, media_type="text/html", headers={"Cache-Control": "no-store"})
 
 
+@app.get("/styles.css", include_in_schema=False)
+def web_styles() -> FileResponse:
+    return _web_response("styles.css")
+
+
+@app.get("/app.js", include_in_schema=False)
+def web_script() -> FileResponse:
+    return _web_response("app.js")
+
+
 @app.get("/web/{name}", include_in_schema=False)
 def web_asset(name: str) -> FileResponse:
-    if name not in {"styles.css", "app.js"}:
-        raise HTTPException(404, "asset not found")
-    path = _web_file(name)
-    if not path.is_file():
-        raise HTTPException(404, f"web/{name} not found")
-    media_type = "text/css" if name.endswith(".css") else "application/javascript"
-    return FileResponse(path, media_type=media_type, headers={"Cache-Control": "no-store"})
+    return _web_response(name)
 
 
 @app.exception_handler(HTTPException)
