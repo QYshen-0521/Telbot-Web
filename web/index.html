@@ -3,508 +3,257 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#070b10" />
-    <meta
-      name="description"
-      content="Telbot 天文控制台。没有树莓派时可以浏览介绍；检测到后端后才启用指向、拍摄和计划。"
-    />
-    <title>Telbot 天文控制台</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23070b10' width='32' height='32' rx='8'/%3E%3Cpath fill='%23e4c48a' d='M16 6a10 10 0 1 0 8.6 15 8 8 0 1 1-8.6-15z'/%3E%3C/svg%3E" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="Telbot。对话、拍摄、计划与设置。" />
+    <title>Telbot</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111111'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-size='16' fill='white'%3ET%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-connected="false">
-    <div class="sky" aria-hidden="true"></div>
-    <header class="site-header">
-      <div class="header-row">
-        <a class="brand" href="#overview">
-          <span class="mark" aria-hidden="true"></span>
-          <span>
-            <strong>Telbot</strong>
-            <small>天文控制台</small>
-          </span>
-        </a>
-        <div class="header-status">
-          <p id="statusPill" class="pill offline" role="status" aria-live="polite">设备未连接</p>
-          <p id="modeBadge" class="pill mode">浏览模式</p>
-        </div>
-      </div>
-      <nav class="site-nav" aria-label="页面">
-        <a href="#overview">概览</a>
-        <a href="#how">如何工作</a>
-        <a href="#safety">安全</a>
-        <a href="#tour">界面导览</a>
-        <a href="#console">控制台</a>
-      </nav>
-    </header>
+  <body data-connected="false" data-view="chat" data-advanced="false">
+    <div id="splash" role="presentation">
+      <p class="splash-word" aria-label="Telbot">
+        <span>T</span><span>e</span><span>l</span><span>b</span><span>o</span><span>t</span>
+      </p>
+    </div>
 
-    <main class="page">
-      <section id="overview" class="block">
-        <p class="eyebrow">Night desk</p>
-        <div class="hero">
-          <h1>夜里先打开的望远镜控制台</h1>
-          <p class="lede">
-            这页本身是静态网站。树莓派不在线时，功能介绍、工作原理、安全说明和界面导览都可以看。
-            只有检测到 Telbot 后端之后，指向、拍摄和计划才会从灰色变成可操作。
-          </p>
+    <div class="shell">
+      <aside id="sidebar" aria-label="主导航">
+        <div class="side-top">
+          <button type="button" id="closeSidebar" class="icon-btn" aria-label="关闭菜单">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="brand">Telbot</div>
         </div>
-        <p id="overviewState" class="callout">
-          设备未连接。你正在浏览模式。连接成功后，控制台里的指向、拍摄、叠图、参数保存、凌星运行和语音发送才会启用。
-        </p>
-        <ul class="stat-row">
-          <li><strong>始终可看</strong><span>介绍不依赖树莓派</span></li>
-          <li><strong>检测到才控制</strong><span>成功的 GET /health</span></li>
-          <li><strong>默认干跑</strong><span>真机需要再次确认</span></li>
-        </ul>
-        <div class="feature-grid">
-          <article class="card">
-            <h2>自然语言</h2>
-            <p>用中文说「帮我指向木星」「归位」「拍 5 秒」。问句走问答，操作句才会变成控制意图。</p>
-          </article>
-          <article class="card">
-            <h2>拍摄</h2>
-            <p>单张曝光和预览、边拍边叠，以及 Bias、Dark、Flat、Light 校准帧。</p>
-          </article>
-          <article class="card">
-            <h2>设备</h2>
-            <p>查看赤道仪、相机、电调、滤镜轮和 USB。电调可以读位置，连接后才允许移动。</p>
-          </article>
-          <article class="card">
-            <h2>凌星计划</h2>
-            <p>查看系外行星凌星计划状态。启动和中止都算控制，未连接时停用。</p>
-          </article>
-          <article class="card">
-            <h2>两种打开方式</h2>
-            <p>GitHub Pages 上这是一份一直在线的说明。树莓派上的 FastAPI 则把同一页变成同源控制台。</p>
-          </article>
-          <article class="card">
-            <h2>安全默认</h2>
-            <p>请求默认不带真机执行。打开真机后，每一次 execute=true 都会再弹窗确认。</p>
-          </article>
+        <nav class="side-nav">
+          <button type="button" data-view="chat" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7.5h12M6 12h8M6 16.5h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><rect x="3.5" y="4" width="17" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+            对话
+          </button>
+          <button type="button" data-view="capture">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8.5l1.2-2h5.6L16 8.5h2.2A1.8 1.8 0 0 1 20 10.3v7.4a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 17.7v-7.4a1.8 1.8 0 0 1 1.8-1.8H8z" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="13.2" r="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+            拍摄
+          </button>
+          <button type="button" data-view="plan">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8 3.8v3.2M16 3.8v3.2M4 9.5h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            计划
+            <span id="planBadge" class="badge" hidden>0</span>
+          </button>
+          <button type="button" data-view="settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6 6l1.6 1.6M16.4 16.4L18 18M18 6l-1.6 1.6M7.6 16.4L6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            设置
+          </button>
+        </nav>
+        <div class="side-foot">
+          <p id="statusPill" class="status offline" role="status" aria-live="polite">未连接</p>
+          <label class="switch-row">
+            <span>真机执行</span>
+            <input id="executeToggle" type="checkbox" role="switch" disabled />
+          </label>
         </div>
-        <div class="split">
-          <article class="card">
-            <h2>现在就能看</h2>
-            <ul>
-              <li>功能概览和界面导览</li>
-              <li>后端如何被检测到</li>
-              <li>干跑、确认和公网链接的风险</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h2>连接后才开放</h2>
-            <ul>
-              <li>指向、归位、急停和语音指令</li>
-              <li>单张、叠图、校准和预览</li>
-              <li>设备读取、凌星运行、参数保存</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+      </aside>
+      <div id="scrim" hidden></div>
 
-      <section id="how" class="block">
-        <p class="eyebrow">How it fits</p>
-        <h2>静态壳，加上可选的树莓派</h2>
-        <p class="section-lead">
-          页面不自带望远镜。它只在浏览器里探测有没有 Telbot 的 HTTP 服务。探测失败就停在浏览模式。
-        </p>
-        <ol class="steps">
-          <li>
-            <h3>打开页面</h3>
-            <p>GitHub Pages、本机静态服务器，或树莓派上的 <code>telbot serve</code>，看到的是同一套文件。</p>
-          </li>
-          <li>
-            <h3>探测 GET /health</h3>
-            <p>同源页面优先请求相对路径 <code>/health</code>。静态托管则继续尝试已保存地址、隧道、局域网名和本机端口。</p>
-          </li>
-          <li>
-            <h3>失败就只浏览</h3>
-            <p>状态保持「设备未连接」。控制区整组停用，避免在没有后端时发出指向或曝光。</p>
-          </li>
-          <li>
-            <h3>成功才控制</h3>
-            <p>文字走 <code>/text</code>，问答走 <code>/chat</code>，拍摄、计划和参数走各自的 API。默认 <code>execute=false</code>。</p>
-          </li>
-        </ol>
-        <div class="split">
-          <article class="card">
-            <h2>A. 树莓派同源</h2>
-            <p>浏览器打开 <code>http://主机:8765/</code>。页面和 API 同一来源，控制台直接使用相对路径。</p>
-          </article>
-          <article class="card">
-            <h2>B. GitHub Pages</h2>
-            <p>介绍一直在线。要遥控望远镜，在连接面板填写树莓派或 https 隧道地址，或让自动探测命中本机与 <code>telbot.local</code>。</p>
-          </article>
-        </div>
-        <article class="card detect-card">
-          <h2>自动探测顺序</h2>
-          <ol>
-            <li>地址栏参数 <code>?api=</code>，或连接面板里填写的地址</li>
-            <li>与当前页面同源的 <code>/health</code></li>
-            <li>勾选「记住此地址」后保存的 API</li>
-            <li>曾经保存过的 https 隧道</li>
-            <li><code>http://telbot.local:8765</code></li>
-            <li><code>http://127.0.0.1:8765</code></li>
-          </ol>
-          <p class="fine">填写了地址仍会按上面的顺序继续找；若最终用了别的地址，面板会写明。把 <code>?api=same</code> 设上时，只检测同源。</p>
-        </article>
-      </section>
+      <main class="main">
+        <header class="topbar">
+          <button type="button" id="menuButton" class="icon-btn" aria-label="打开菜单">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <h1 id="viewTitle">对话</h1>
+          <p id="statusPillTop" class="status offline">未连接</p>
+        </header>
 
-      <section id="safety" class="block">
-        <p class="eyebrow">Safety</p>
-        <h2>默认不动设备</h2>
-        <div class="feature-grid">
-          <article class="card">
-            <h2>干跑</h2>
-            <p>真机执行默认关闭。关闭时，指向、曝光和计划请求都带着 <code>execute=false</code>，用于核对意图。</p>
-          </article>
-          <article class="card">
-            <h2>再次确认</h2>
-            <p>打开真机执行本身需要确认。之后每一次会真实控制设备的操作，都会再问一次。</p>
-          </article>
-          <article class="card">
-            <h2>参数会立刻写入</h2>
-            <p>保存参数调用 <code>PATCH /config/env</code>，不看干跑开关。它会写回树莓派上的 <code>.env</code>，所以保存前单独确认。</p>
-          </article>
-          <article class="card">
-            <h2>不要暴露到公网</h2>
-            <p>跨域头只让浏览器能调用接口，不是登录。隧道链接不要发给不信任的人，树莓派也不要直接对公网开放。</p>
-          </article>
-          <article class="card">
-            <h2>现场</h2>
-            <p>真机前确认镜筒周围无障碍、线缆不受拉扯，并且没有 Ekos 等软件同时控制同一套设备。</p>
-          </article>
-          <article class="card">
-            <h2>HTTPS 页面的限制</h2>
-            <p>GitHub Pages 是 https。浏览器会拦截它去请求 <code>http://127.0.0.1</code> 或 <code>http://telbot.local</code>。远程控制需要 https 隧道，或改用树莓派上的 http 页面。</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="tour" class="block">
-        <p class="eyebrow">Tour</p>
-        <h2>界面导览</h2>
-        <p class="section-lead">下面这些区域在未连接时也能看。控制按钮会是灰色的，直到健康检查成功。</p>
-        <ol class="tour-list">
-          <li>
-            <h3>顶栏状态</h3>
-            <p>「设备未连接」或「设备已连接」，旁边是浏览、干跑或真机。这是整页的总开关说明，不是装饰。</p>
-          </li>
-          <li>
-            <h3>连接面板</h3>
-            <p>填写 API 根地址，勾选是否记住，然后按「重新检测」。成功后这里摘要版本、INDI、赤道仪、相机、电调和滤镜轮。</p>
-          </li>
-          <li>
-            <h3>安全条</h3>
-            <p>真机开关和急停放在所有控制页的上面。未连接时它们和拍摄、计划一起停用。</p>
-          </li>
-          <li>
-            <h3>对话</h3>
-            <p>「什么是 INDI」这类问题走 <code>/chat</code>。 「指向木星」走 <code>/text</code>。语音在连接后才发送。</p>
-          </li>
-          <li>
-            <h3>拍摄、设备、计划、参数</h3>
-            <p>单张和叠图、USB 与电调、凌星计划、白名单里的 <code>TELBOT_*</code> 参数。读取和执行都要后端在线。</p>
-          </li>
-        </ol>
-        <figure class="mock">
-          <figcaption>未连接时，控制区保持停用</figcaption>
-          <div class="mock-bar"><span>设备未连接</span><span>浏览模式</span></div>
-          <div class="mock-grid">
-            <div>API 地址<br /><em>留空则自动探测</em></div>
-            <div>重新检测<br /><em>只读健康检查</em></div>
-            <div class="mock-off">指向木星<br /><em>已停用</em></div>
-            <div class="mock-off">拍摄单张<br /><em>已停用</em></div>
+        <section id="view-chat" class="view active" aria-label="对话">
+          <div id="chatScroll" class="chat-scroll">
+            <p id="chatEmpty" class="chat-empty">输入文字并发送，或点左下角麦克风后按住说话（微信样式）。</p>
+            <div id="messages" class="messages"></div>
           </div>
-        </figure>
-      </section>
-
-      <section id="console" class="block">
-        <p class="eyebrow">Console</p>
-        <h2>控制台</h2>
-        <div class="console-grid">
-          <aside class="card connection-card" aria-label="连接">
-            <div class="panel-heading">
-              <h2>连接</h2>
-              <button id="redetect" class="btn btn-primary" type="button">重新检测</button>
-            </div>
-            <p id="connectionExplain" class="explain">
-              设备未连接。介绍可以继续看。指向、拍摄、边拍边叠、校准、设备操作、凌星运行、参数保存和语音发送都已停用。GET /health 成功后才会开放。
-            </p>
-            <p id="mixedHint" class="fine warn" hidden>
-              当前页面是 HTTPS。浏览器会拦截对 http://127.0.0.1 和 http://telbot.local 的访问。请填写 https 隧道，或改用树莓派上的 http 页面。
-            </p>
-            <label class="field">
-              <span>API 根地址</span>
-              <input
-                id="apiBase"
-                type="url"
-                inputmode="url"
-                placeholder="留空表示自动探测，或填写 http://telbot.local:8765"
-                autocomplete="off"
-                autocapitalize="off"
-                spellcheck="false"
-              />
-            </label>
-            <label class="checkline">
-              <input id="rememberApi" type="checkbox" />
-              <span>记住此地址。https 隧道也会留给下次自动探测；取消勾选后再检测会忘掉。</span>
-            </label>
-            <p class="fine">留空后点「重新检测」会按同源、已保存地址、隧道、telbot.local 和 127.0.0.1 的顺序查找。</p>
-            <p id="usingBase" class="using">正在使用：尚未连接</p>
-            <p id="checkedAt" class="fine">尚未检测</p>
-            <dl id="healthSummary" class="health-list">
-              <div><dt>健康检查</dt><dd>尚无数据</dd></div>
-            </dl>
-            <button id="openHealthJson" class="btn btn-ghost" type="button" disabled>查看状态 JSON</button>
-            <details class="probe-details">
-              <summary>检测细节</summary>
-              <ul id="probeLog"><li>打开页面后会自动检测。</li></ul>
-            </details>
-          </aside>
-
-          <div class="console-main">
-            <p id="lockBanner" class="lock-banner">
-              设备未连接。指向、拍摄、叠图、校准、设备读取、凌星运行、参数保存和语音发送已停用。连上后端后，这些控制会启用，并仍然默认干跑。
-            </p>
-            <p id="onlineBanner" class="online-banner" hidden>
-              设备已连接。控制已启用。默认干跑；打开真机执行后，每次真实操作都会再确认。
-            </p>
-            <div class="subnav" role="tablist" aria-label="控制台分页">
-              <button type="button" data-panel="chat" class="active" role="tab" aria-selected="true">对话</button>
-              <button type="button" data-panel="capture" role="tab" aria-selected="false">拍摄</button>
-              <button type="button" data-panel="devices" role="tab" aria-selected="false">设备</button>
-              <button type="button" data-panel="plan" role="tab" aria-selected="false">计划</button>
-              <button type="button" data-panel="settings" role="tab" aria-selected="false">参数</button>
-            </div>
-
-            <fieldset class="needs-backend" id="controlFieldset" disabled>
-              <legend class="sr-only">设备控制，未连接时停用</legend>
-              <div class="safety-bar">
-                <label class="switch">
-                  <input id="executeToggle" type="checkbox" />
-                  <span>
-                    <strong>真机执行</strong>
-                    <small>关闭时只干跑。打开后，每次真实操作都会再确认。</small>
-                  </span>
-                </label>
-                <button id="abortButton" class="btn btn-danger" type="button">急停 / Abort</button>
-              </div>
-
-              <div class="console-panel active" id="panel-chat" data-panel="chat" role="tabpanel">
-                <div class="chat-layout">
-                  <div id="messages" class="messages" aria-live="polite">
-                    <p class="empty-hint">设备未连接，对话还不能发送。连接后可以用中文下指令，也可以提天文问题。</p>
-                  </div>
-                  <aside class="side-stack">
-                    <section class="card inset">
-                      <h2>快捷命令</h2>
-                      <div class="quick-grid">
-                        <button class="quick-command btn btn-ghost" type="button" data-command="帮我指向木星">指向木星</button>
-                        <button class="quick-command btn btn-ghost" type="button" data-command="归位">归位</button>
-                        <button class="quick-command btn btn-ghost" type="button" data-command="检查设备">检查设备</button>
-                        <button class="quick-command btn btn-ghost" type="button" data-command="拍5秒">拍 5 秒</button>
-                        <button class="quick-command btn btn-ghost" type="button" data-command="校准">Plate solve</button>
-                        <button class="quick-command btn btn-ghost" type="button" data-command="今晚有哪些系外行星凌星">今晚凌星</button>
-                      </div>
-                    </section>
-                    <section class="card inset">
-                      <h2>本次结果</h2>
-                      <div id="lastIntent" class="empty-hint">还没有命令结果。</div>
-                    </section>
-                  </aside>
-                </div>
-                <form id="composer" class="composer">
-                  <button id="recordButton" class="record" type="button">语音</button>
-                  <textarea id="promptInput" rows="1" enterkeyhint="send" placeholder="例如：帮我指向木星、拍5秒、归位，或问什么是 INDI"></textarea>
-                  <button class="btn btn-primary send-button" type="submit">发送</button>
-                </form>
-              </div>
-
-              <div class="console-panel" id="panel-capture" data-panel="capture" role="tabpanel">
-                <div class="split">
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>拍单张</h2>
-                      <span class="hint">POST /camera/snap</span>
-                    </div>
-                    <label class="field">
-                      <span>曝光秒数</span>
-                      <input id="singleExposure" type="number" min="0.1" max="3600" step="0.1" value="5" />
-                    </label>
-                    <div class="button-row">
-                      <button id="snapButton" class="btn btn-primary" type="button">拍摄单张</button>
-                      <button id="loadSnapPreview" class="btn btn-ghost" type="button">加载预览</button>
-                    </div>
-                    <div id="snapResult" class="result-box">尚未拍摄。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>照片预览</h2>
-                      <span class="hint">GET /camera/snap/preview</span>
-                    </div>
-                    <div id="snapPreviewBox" class="preview-box">暂无预览。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>边拍边叠</h2>
-                      <span class="hint">Live Stack</span>
-                    </div>
-                    <div class="field-row">
-                      <label class="field">
-                        <span>总时长秒</span>
-                        <input id="liveDuration" type="number" min="1" step="1" value="300" />
-                      </label>
-                      <label class="field">
-                        <span>单帧曝光秒</span>
-                        <input id="liveExposure" type="number" min="0.1" step="0.1" value="2" />
-                      </label>
-                    </div>
-                    <div class="button-row">
-                      <button id="liveStart" class="btn btn-primary" type="button">开始叠加</button>
-                      <button id="liveStop" class="btn btn-ghost" type="button">停止</button>
-                      <button id="liveStatus" class="btn btn-ghost" type="button">刷新状态</button>
-                    </div>
-                    <div id="liveResult" class="result-box">尚未启动。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>校准拍摄</h2>
-                      <span class="hint">Bias / Dark / Flat / Light</span>
-                    </div>
-                    <div class="field-row">
-                      <label class="field">
-                        <span>类型</span>
-                        <select id="calKind">
-                          <option value="bias">Bias 偏置</option>
-                          <option value="dark">Dark 暗场</option>
-                          <option value="flat">Flat 平场</option>
-                          <option value="light">Light 亮场</option>
-                        </select>
-                      </label>
-                      <label class="field">
-                        <span>张数</span>
-                        <input id="calCount" type="number" min="1" step="1" value="5" />
-                      </label>
-                      <label class="field">
-                        <span>曝光秒数</span>
-                        <input id="calExposure" type="number" min="0" step="0.1" value="1" />
-                      </label>
-                    </div>
-                    <div class="button-row">
-                      <button id="calStart" class="btn btn-primary" type="button">开始校准</button>
-                      <button id="calStop" class="btn btn-ghost" type="button">停止校准</button>
-                    </div>
-                    <div id="calResult" class="result-box">尚未拍摄校准帧。</div>
-                  </section>
-                </div>
-              </div>
-
-              <div class="console-panel" id="panel-devices" data-panel="devices" role="tabpanel">
-                <div class="split">
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>设备健康</h2>
-                      <button id="deviceRefresh" class="btn btn-ghost" type="button">刷新</button>
-                    </div>
-                    <div id="deviceCards" class="device-cards"></div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>USB 设备</h2>
-                      <button id="usbRefresh" class="btn btn-ghost" type="button">读取 USB</button>
-                    </div>
-                    <div id="usbResult" class="result-box">尚未读取。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>电调</h2>
-                      <button id="focuserRefresh" class="btn btn-ghost" type="button">读取位置</button>
-                    </div>
-                    <label class="field">
-                      <span>移动到绝对位置</span>
-                      <input id="focuserPosition" type="number" min="0" step="1" placeholder="例如 33400" />
-                    </label>
-                    <button id="focuserMove" class="btn btn-primary" type="button">移动电调</button>
-                    <div id="focuserResult" class="result-box">尚未读取。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>滤镜轮</h2>
-                      <button id="filterRefresh" class="btn btn-ghost" type="button">读取滤镜</button>
-                    </div>
-                    <div id="filterResult" class="result-box">尚未读取。</div>
-                  </section>
-                </div>
-              </div>
-
-              <div class="console-panel" id="panel-plan" data-panel="plan" role="tabpanel">
-                <div class="split">
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>凌星计划状态</h2>
-                      <button id="transitStatus" class="btn btn-ghost" type="button">刷新状态</button>
-                    </div>
-                    <div id="transitResult" class="result-box">尚未查询。</div>
-                  </section>
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>计划控制</h2>
-                      <span class="hint">启动前请核对计划</span>
-                    </div>
-                    <label class="field">
-                      <span>计划 JSON 路径，可留空使用最新计划</span>
-                      <input id="transitPlanPath" type="text" placeholder="留空 = 最新 transit_*.json" />
-                    </label>
-                    <div class="button-row">
-                      <button id="transitRun" class="btn btn-primary" type="button">启动凌星计划</button>
-                      <button id="transitAbort" class="btn btn-danger" type="button">中止凌星</button>
-                    </div>
-                  </section>
-                </div>
-              </div>
-
-              <div class="console-panel" id="panel-settings" data-panel="settings" role="tabpanel">
-                <div class="split">
-                  <section class="card inset">
-                    <div class="panel-heading">
-                      <h2>服务器参数</h2>
-                      <button id="envLoad" class="btn btn-ghost" type="button">读取参数</button>
-                    </div>
-                    <div id="envFields" class="env-fields"></div>
-                    <button id="envSave" class="btn btn-primary" type="button">保存修改</button>
-                  </section>
-                  <section class="card inset">
-                    <h2>写入范围</h2>
-                    <p>只提交后端白名单中的 <code>TELBOT_*</code>。保存会调用 <code>PATCH /config/env</code>，并立即作用于当前服务进程。</p>
-                    <p>未连接时这一组按钮保持停用。连接后请先读取，再修改需要变更的项。</p>
-                  </section>
-                </div>
-              </div>
+          <p id="chatStatus" class="chat-status" hidden></p>
+          <form id="composer" class="composer">
+            <fieldset id="controlFieldset" disabled>
+              <button type="button" id="micButton" class="icon-btn" aria-label="语音" disabled>
+                <svg id="micIcon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3.5" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 11.5a5.5 5.5 0 0 0 11 0M12 17v3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              </button>
+              <textarea id="prompt" rows="1" placeholder="输入消息" enterkeyhint="send"></textarea>
+              <button type="button" id="voiceHold" class="voice-hold" hidden>按住 录音</button>
+              <button type="submit" id="sendButton" class="send" aria-label="发送" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V7M7.5 11.5 12 7l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
             </fieldset>
+          </form>
+          <p id="composerHint" class="composer-hint">未连接，无法发送。</p>
+        </section>
+
+        <section id="view-capture" class="view" aria-label="拍摄" hidden>
+          <div class="capture-wrap">
+            <div class="segments" role="tablist" aria-label="拍摄模式">
+              <button type="button" role="tab" data-mode="liveStack" aria-selected="true">边拍边叠</button>
+              <button type="button" role="tab" data-mode="calibration" aria-selected="false">校准拍摄</button>
+              <button type="button" role="tab" data-mode="singleShot" aria-selected="false">拍单张</button>
+            </div>
+            <p id="captureNotice" class="notice" hidden></p>
+
+            <div id="livePane" class="pane active">
+              <div id="liveStage" class="stage">
+                <p id="liveEmpty" class="stage-empty">点击下方按钮开始边拍边叠，预览图将显示在此处。</p>
+              </div>
+              <div id="liveStatusBar" class="status-bar" hidden>
+                <div class="status-bar-head"><span id="liveStatusLabel">状态</span><button type="button" id="liveCopy">复制</button></div>
+                <pre id="liveStatus"></pre>
+              </div>
+              <div class="shutter-row">
+                <button type="button" id="liveAdvanced" class="icon-btn advanced-only" aria-label="边拍边叠参数" disabled>···</button>
+                <button type="button" id="liveShutter" class="shutter" aria-label="开始边拍边叠" disabled><i></i></button>
+              </div>
+            </div>
+
+            <div id="calPane" class="pane">
+              <div id="calBody" class="cal-body"></div>
+              <div id="calStatusBar" class="status-bar" hidden>
+                <div class="status-bar-head"><span id="calStatusLabel">状态</span><button type="button" id="calCopy">复制</button></div>
+                <pre id="calStatus"></pre>
+              </div>
+            </div>
+
+            <div id="snapPane" class="pane">
+              <div id="snapStage" class="stage stage-dark">
+                <p id="snapEmpty" class="stage-empty light">拍单张后，最近一张照片会显示在这里</p>
+              </div>
+              <div id="snapStatusBar" class="status-bar" hidden>
+                <div class="status-bar-head"><span id="snapStatusLabel">状态</span><button type="button" id="snapCopy">复制</button></div>
+                <pre id="snapStatus"></pre>
+              </div>
+              <div class="shutter-row">
+                <button type="button" id="snapAlbum" class="album-btn" aria-label="相册" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 15l4.2-4 3.2 3.2L15 10.5 20 15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" id="snapShutter" class="shutter shutter-light" aria-label="拍照" disabled><i></i></button>
+                <label class="exposure-field advanced-only">
+                  <input id="snapExposure" inputmode="decimal" value="0.5" disabled />
+                  <span>秒</span>
+                </label>
+              </div>
+            </div>
           </div>
+        </section>
+
+        <section id="view-plan" class="view" aria-label="计划" hidden>
+          <div class="sheet">
+            <div id="planEmpty" class="empty-block">
+              <h2>暂无观测计划</h2>
+              <p>在「对话」中说「帮我规划一下系外行星凌星观测」等指令，生成计划后会显示在这里。</p>
+            </div>
+            <div id="planFilled" hidden>
+              <p id="planNotice" class="notice" hidden></p>
+              <p id="planPrecheck" class="fine" hidden>凌食开始前约 10 分钟，Pi 会自动预检拍照。退出 App 后若允许通知，将通过系统通知告知预检是否通过。</p>
+              <div id="planList" class="plan-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-settings" class="view" aria-label="设置" hidden>
+          <div class="sheet">
+            <div id="settingsHome" class="inset-list">
+              <button type="button" data-settings="devices">连接设备</button>
+              <button type="button" data-settings="params">默认参数</button>
+              <button type="button" data-settings="advanced">高级</button>
+            </div>
+
+            <div id="settingsDevices" class="settings-page" hidden>
+              <button type="button" class="back" data-settings="home">设置</button>
+              <h2>连接设备</h2>
+              <label class="field">
+                <span>服务地址</span>
+                <input id="apiBase" type="url" inputmode="url" placeholder="http://telbot.local:8765" autocomplete="off" />
+              </label>
+              <label class="check-row">
+                <input id="rememberApi" type="checkbox" />
+                <span>记住此地址</span>
+              </label>
+              <button type="button" id="redetect">重新检测</button>
+              <p id="mixedHint" class="fine" hidden>当前页面是 https。请填写 https 隧道，或直接打开树莓派上的页面。</p>
+              <p id="deviceError" class="notice" hidden></p>
+              <div id="deviceList" class="inset-list devices"></div>
+              <p id="deviceFoot" class="fine"></p>
+            </div>
+
+            <div id="settingsParams" class="settings-page" hidden>
+              <button type="button" class="back" data-settings="home">设置</button>
+              <h2>默认参数</h2>
+              <p id="envStatus" class="fine"></p>
+              <div id="envFields"></div>
+              <p class="fine">进入页面时会从 Pi 读取当前生效值（.env 与运行时合并）。编辑后写回 .env 并立即对 telbot serve 生效。不含 API Key。</p>
+            </div>
+
+            <div id="settingsAdvanced" class="settings-page" hidden>
+              <button type="button" class="back" data-settings="home">设置</button>
+              <h2>高级</h2>
+              <label class="switch-row inset">
+                <span>高级选项</span>
+                <input id="advancedToggle" type="checkbox" role="switch" />
+              </label>
+              <p class="fine">开启后，可在「计划」页手动调整观测策略（例如选择滤镜等）。该功能尚未实现，敬请期待。</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="confirmDialog">
+      <form method="dialog">
+        <p id="confirmText"></p>
+        <div class="dialog-actions">
+          <button type="button" id="confirmCancel" value="cancel">取消</button>
+          <button type="button" id="confirmAccept" value="default">确认</button>
         </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <p>Telbot 网页控制台。静态页面可以放在 GitHub Pages；控制需要一台正在运行的 Telbot 后端。</p>
-    </footer>
-
-    <dialog id="confirmDialog" class="confirm-dialog">
-      <h2>确认真机执行</h2>
-      <p id="confirmText">这次操作会真实控制设备。</p>
-      <div class="dialog-actions">
-        <button id="cancelConfirm" class="btn btn-ghost" type="button">取消</button>
-        <button id="acceptConfirm" class="btn btn-danger" type="button">确认执行</button>
-      </div>
+      </form>
     </dialog>
 
-    <dialog id="jsonDialog" class="json-dialog">
-      <div class="panel-heading">
-        <h2>JSON 数据</h2>
-        <button id="closeJsonDialog" class="btn btn-ghost" type="button">关闭</button>
-      </div>
-      <pre id="jsonDialogBody"></pre>
+    <dialog id="prepDialog">
+      <form method="dialog">
+        <h2 id="prepTitle"></h2>
+        <p id="prepBody"></p>
+        <div class="dialog-actions">
+          <button type="button" id="prepCancel">先不拍</button>
+          <button type="button" id="prepStart">准备好了，开始拍</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="liveDialog">
+      <form method="dialog">
+        <h2>边拍边叠参数</h2>
+        <label class="field">每帧曝光（秒）<input id="liveExposure" inputmode="decimal" value="2" /></label>
+        <label class="field">总拍摄时长（秒）<input id="liveDuration" inputmode="numeric" value="86400" /></label>
+        <label class="field">帧间隔（秒）<input id="liveCadence" inputmode="decimal" placeholder="自动" /></label>
+        <label class="field">会话名（可选）<input id="liveTag" placeholder="可选" /></label>
+        <p class="fine">默认总时长 86400 秒（约 24 小时）。帧间隔留空时由 Pi 按曝光 + overhead 自动计算。</p>
+        <div class="dialog-actions">
+          <button type="button" id="liveCancel">取消</button>
+          <button type="button" id="liveDone">完成</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="albumDialog">
+      <form method="dialog">
+        <header class="dialog-head">
+          <h2>照片</h2>
+          <button type="button" id="albumClose">关闭</button>
+        </header>
+        <div id="albumGrid" class="album-grid"></div>
+      </form>
+    </dialog>
+
+    <dialog id="filterDialog">
+      <form method="dialog">
+        <header class="dialog-head">
+          <h2>选择滤镜</h2>
+          <button type="button" id="filterClose">关闭</button>
+        </header>
+        <div id="filterList" class="inset-list"></div>
+      </form>
     </dialog>
 
     <script src="app.js"></script>

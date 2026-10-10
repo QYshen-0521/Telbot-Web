@@ -11,13 +11,15 @@ def test_index_is_browseable_shell() -> None:
     response = client.get("/")
     assert response.status_code == 200
     html = response.text
-    assert "设备未连接" in html
+    assert "未连接" in html
     assert 'href="styles.css"' in html
     assert 'src="app.js"' in html
     assert 'id="controlFieldset"' in html
     assert "disabled" in html
-    assert "如何工作" in html
     assert "重新检测" in html
+    assert "对话" in html and "拍摄" in html and "计划" in html and "设置" in html
+    assert "如何工作" not in html
+    assert "界面导览" not in html
 
 
 def test_root_assets_match_pages_layout() -> None:
