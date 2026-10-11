@@ -587,3 +587,38 @@ dialog p { white-space: pre-wrap; }
   .splash-word span { animation: none; opacity: 1; }
   #sidebar { transition: none; }
 }
+
+
+.settings-scroll {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 40px;
+}
+.settings-block h2 {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+.settings-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.settings-block > button#redetect {
+  align-self: flex-start;
+  border: 0;
+  background: var(--fill);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 500;
+}
+
+#view-settings.view.active {
+  overflow: auto;
+}
+#view-settings .sheet {
+  width: min(720px, calc(100% - 28px));
+}

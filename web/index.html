@@ -156,16 +156,9 @@
         </section>
 
         <section id="view-settings" class="view" aria-label="设置" hidden>
-          <div class="sheet">
-            <div id="settingsHome" class="inset-list">
-              <button type="button" data-settings="devices">连接设备</button>
-              <button type="button" data-settings="params">默认参数</button>
-              <button type="button" data-settings="advanced">高级</button>
-            </div>
-
-            <div id="settingsDevices" class="settings-page" hidden>
-              <button type="button" class="back" data-settings="home">设置</button>
-              <h2>连接设备</h2>
+          <div class="sheet settings-scroll">
+            <section class="settings-block" aria-labelledby="settingsDevicesTitle">
+              <h2 id="settingsDevicesTitle">连接设备</h2>
               <label class="field">
                 <span>服务地址</span>
                 <input id="apiBase" type="url" inputmode="url" placeholder="http://telbot.local:8765" autocomplete="off" />
@@ -179,25 +172,23 @@
               <p id="deviceError" class="notice" hidden></p>
               <div id="deviceList" class="inset-list devices"></div>
               <p id="deviceFoot" class="fine"></p>
-            </div>
+            </section>
 
-            <div id="settingsParams" class="settings-page" hidden>
-              <button type="button" class="back" data-settings="home">设置</button>
-              <h2>默认参数</h2>
+            <section class="settings-block" aria-labelledby="settingsParamsTitle">
+              <h2 id="settingsParamsTitle">默认参数</h2>
               <p id="envStatus" class="fine"></p>
               <div id="envFields"></div>
               <p class="fine">进入页面时会从 Pi 读取当前生效值（.env 与运行时合并）。编辑后写回 .env 并立即对 telbot serve 生效。不含 API Key。</p>
-            </div>
+            </section>
 
-            <div id="settingsAdvanced" class="settings-page" hidden>
-              <button type="button" class="back" data-settings="home">设置</button>
-              <h2>高级</h2>
+            <section class="settings-block" aria-labelledby="settingsAdvancedTitle">
+              <h2 id="settingsAdvancedTitle">高级</h2>
               <label class="switch-row inset">
                 <span>高级选项</span>
                 <input id="advancedToggle" type="checkbox" role="switch" />
               </label>
               <p class="fine">开启后，可在「计划」页手动调整观测策略（例如选择滤镜等）。该功能尚未实现，敬请期待。</p>
-            </div>
+            </section>
           </div>
         </section>
       </main>

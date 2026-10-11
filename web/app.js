@@ -94,7 +94,6 @@ const statusTitle = {
 };
 
 const viewTitle = { chat: "对话", capture: "拍摄", plan: "计划", settings: "设置" };
-const settingsTitle = { devices: "连接设备", params: "默认参数", advanced: "高级" };
 
 const state = {
   connected: false,
@@ -107,7 +106,6 @@ const state = {
   notice: "",
   lastError: "",
   view: "chat",
-  settingsPage: "home",
   captureMode: "liveStack",
   messages: [],
   plans: [],
@@ -406,7 +404,10 @@ async function detect(options = {}) {
     persistAfterDetect(winner.base);
     renderConnection();
     refreshDevices();
-    if (state.view === "settings" && state.settingsPage === "params") loadEnv();
+    if (state.view === "settings") {
+      refreshDevices();
+      loadEnv();
+    }
     syncLiveIfRunning();
     refreshPlans();
     return;
@@ -612,8 +613,6 @@ function showView(name) {
     if (on) button.setAttribute("aria-current", "page");
     else button.removeAttribute("aria-current");
   });
-  if (name !== "settings") state.settingsPage = "home";
-  renderSettingsPage();
   el.viewTitle.textContent = viewTitle[name];
   closeNav();
   if (name === "plan") {
@@ -626,17 +625,12 @@ function showView(name) {
     renderCaptureLock();
     if (state.captureMode === "liveStack") syncLiveIfRunning();
   }
-  if (name === "settings" && state.settingsPage === "params") loadEnv();
+  if (name === "settings") {
+    refreshDevices();
+    loadEnv();
+  }
 }
 
-function renderSettingsPage() {
-  const page = state.view === "settings" ? state.settingsPage : "home";
-  $("#settingsHome").hidden = page !== "home";
-  $("#settingsDevices").hidden = page !== "devices";
-  $("#settingsParams").hidden = page !== "params";
-  $("#settingsAdvanced").hidden = page !== "advanced";
-  if (state.view === "settings") el.viewTitle.textContent = settingsTitle[page] || "设置";
-}
 
 function closeNav() {
   document.body.classList.remove("nav-open");
@@ -1849,12 +1843,6 @@ function bind() {
   $("#closeSidebar").addEventListener("click", closeNav);
   $("#scrim").addEventListener("click", closeNav);
   $$(".side-nav button").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view)));
-  $$("[data-settings]").forEach((button) => button.addEventListener("click", () => {
-    state.settingsPage = button.dataset.settings;
-    renderSettingsPage();
-    if (state.settingsPage === "devices") refreshDevices();
-    if (state.settingsPage === "params") loadEnv();
-  }));
   $$(".segments button").forEach((button) => button.addEventListener("click", () => setCaptureMode(button.dataset.mode)));
 
   el.composer.addEventListener("submit", (event) => {
